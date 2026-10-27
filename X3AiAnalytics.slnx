@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/X3AiAnalytics.Api/X3AiAnalytics.Api.csproj" />
+    <Project Path="src/X3AiAnalytics.Application/X3AiAnalytics.Application.csproj" />
+    <Project Path="src/X3AiAnalytics.Domain/X3AiAnalytics.Domain.csproj" />
+    <Project Path="src/X3AiAnalytics.Infrastructure/X3AiAnalytics.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/X3AiAnalytics.Tests/X3AiAnalytics.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -23,8 +23,10 @@ public class TitulosVencidosPorClienteQuery : QueryBase
         QueryParameters parameters, CancellationToken ct)
     {
         var dias = parameters.GetInt("diasMinimosAtraso") ?? 1;
-        var limite = DateTime.UtcNow.AddDays(-dias);
+        var hoje = DateTime.UtcNow;
+        var limite = hoje.AddDays(-dias);
 
+        // Agregações traduzíveis para SQL; o cálculo de dias é feito em memória.
         var dados = await Db.TitulosReceber
             .Where(t => t.Status == StatusTitulo.Vencido && t.DataVencimento <= limite)
             .GroupBy(t => new { t.ClienteId, t.Cliente!.Nome })
@@ -33,7 +35,7 @@ public class TitulosVencidosPorClienteQuery : QueryBase
                 Cliente = g.Key.Nome,
                 TotalVencido = g.Sum(x => x.Valor),
                 QuantidadeTitulos = g.Count(),
-                DiasAtrasoMaximo = g.Max(x => (DateTime.UtcNow - x.DataVencimento).Days)
+                VencimentoMaisAntigo = g.Min(x => x.DataVencimento)
             })
             .OrderByDescending(x => x.TotalVencido)
             .Take(MaxRows)
@@ -44,7 +46,7 @@ public class TitulosVencidosPorClienteQuery : QueryBase
             ["cliente"] = d.Cliente,
             ["totalVencido"] = d.TotalVencido,
             ["quantidadeTitulos"] = d.QuantidadeTitulos,
-            ["diasAtrasoMaximo"] = d.DiasAtrasoMaximo
+            ["diasAtrasoMaximo"] = (hoje - d.VencimentoMaisAntigo).Days
         }).ToList();
     }
 }

@@ -19,6 +19,8 @@ public class OrdensProducaoAtrasadasQuery : QueryBase
     protected override async Task<List<Dictionary<string, object?>>> RunAsync(
         QueryParameters parameters, CancellationToken ct)
     {
+        var hoje = DateTime.UtcNow;
+
         var dados = await Db.OrdensProducao
             .Where(o => o.Status == StatusProducao.Atrasada)
             .OrderBy(o => o.DataPrevisao)
@@ -28,7 +30,6 @@ public class OrdensProducaoAtrasadasQuery : QueryBase
                 Produto = o.Produto,
                 Linha = o.Linha,
                 DataPrevisao = o.DataPrevisao,
-                DiasAtraso = (DateTime.UtcNow - o.DataPrevisao).Days,
                 Quantidade = o.Quantidade,
                 ValorPrevisto = o.ValorPrevisto
             })
@@ -41,7 +42,7 @@ public class OrdensProducaoAtrasadasQuery : QueryBase
             ["produto"] = d.Produto,
             ["linha"] = d.Linha,
             ["dataPrevisao"] = d.DataPrevisao.ToString("yyyy-MM-dd"),
-            ["diasAtraso"] = d.DiasAtraso,
+            ["diasAtraso"] = (hoje - d.DataPrevisao).Days,
             ["quantidade"] = d.Quantidade,
             ["valorPrevisto"] = d.ValorPrevisto
         }).ToList();

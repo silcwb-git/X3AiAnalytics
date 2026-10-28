@@ -1,146 +1,198 @@
-🤖 X3AiAnalytics
+# 🤖 X3AiAnalytics
 
-Camada de inteligência conversacional sobre dados de ERP — sem alucinação.
-Projeto de desenvolvimento desenvolvido por Silvana Siqueira para a KETHER — Soluções em Inteligência Artificial.
+Camada de inteligência conversacional sobre dados de ERP — **sem alucinação**.  
+Projeto desenvolvido por **Silvana Siqueira** para a **KETHER — Soluções em Inteligência Artificial**.
 
-🎯 O problema que este projeto resolve
+---
 
-IA generativa é excelente em conversar e extremamente confiável quando o assunto é número de negócio.
+### 🎯 O problema que este projeto resolve
 
-Pergunte a um chatbot genérico “quanto o cliente X me deve?” e ele pode inventar um valor plausível, misturado meses, confundir receita com receitas ou responder com confiança algo que não existe.
+A inteligência artificial generativa é excelente em conversar, mas extremamente não confiável quando o assunto envolve números de negócio estruturados. 
 
-Em um ERP, isso é inaceitável. Um número errado em uma conversa com o cliente é um problema comercial. Um número errado em um relatório fiscal é um problema jurídico.
+Se você perguntar a um chatbot genérico *“quanto o cliente X me deve?”*, ele pode inventar um valor plausível, misturar meses, confundir receitas com despesas ou responder com confiança algo que sequer existe. 
 
-💡 A tese deste projeto: um LLM pode conversar com o dado, mas nunca deve calcular o dado. Ele escolhe qual consultar rodar. O código executável. O banco devolve o número. Só então o LLM redija a resposta — usando exclusivamente o que veio do banco.
+Em um ambiente de ERP, isso é inaceitável:
+* Um número errado em uma conversa com o cliente gera um **problema comercial**.
+* Um número errado em um relatório fiscal gera um **problema jurídico**.
 
-O fluxo é sempre: pergunta → classificação de escopo → planejamento da consulta → execução determinística no banco → composição da resposta a partir do JSON retornado.
+💡 **A tese deste projeto:** Um LLM pode conversar com o dado, mas **nunca deve calcular o dado**. Ele escolhe qual consulta rodar (o código executável), o banco de dados devolve o número exato e só então o LLM redige a resposta — usando exclusivamente o que veio do banco.
 
-✨ O que está implementado
+Pergunta ➔ Classificação de Escopo ➔ Planejamento da Consulta ➔ Execução Determinística no Banco ➔ Composição da Resposta via JSON
 
-Camada O que faz
-🧱 Domain Entidades do ERP: clientes, títulos a receber, contas a pagar, ordens de produção
-📋 Query Catalog 8 consultas de negócio declaradas com nome, domínio, descrição e parâmetros tipados
-🧠 AI Layer IAiProvider com dois provedores: OpenAiProvider (com chave) e DeterministicAiProvider (fallback local)
-⚙️ Orchestrator Orquestra o fluxo classificação → e → executar → compor
-🌐 API Endpoints REST: catálogo, execução direta e pergunta em linguagem natural
-✅ Testes 42 testes cobrindo roteamento, limites, escopo e garantia anti-alucinação
+markdown
+# 🤖 X3AiAnalytics
 
-🏗️ Arquitetura
+Camada de inteligência conversacional sobre dados de ERP — **sem alucinação**.  
+Projeto desenvolvido por **Silvana Siqueira** para a **KETHER — Soluções em Inteligência Artificial**.
 
-O projeto é dividido em quatro camadas, com dependências apontando sempre para dentro:
+---
 
-X3AiAnalytics.Domain — entidades e enumerações. Zero dependência externa.
-X3AiAnalytics.Application — contratos de IA, orquestrador e compositor.
-X3AiAnalytics.Infraestrutura — EF Core, SQLite, catálogo de consultas e implementação de provedores.
-X3AiAnalytics.Api — terminais REST.
-X3AiAnalytics.Tests — xUnit cobrindo unitários, catálogo, orquestrador e HTTP.
+### 🎯 O problema que este projeto resolve
 
-Princípio: o Domínio não conhece o EF Core, a Aplicação não conhece SQLite, a Infraestrutura implementada ou que a Aplicação declara e a Api só orquestra. Trocar SQLite por SQL Server ou PostgreSQL é uma linha no Program.cs.
+A inteligência artificial generativa é excelente em conversar, mas extremamente não confiável quando o assunto envolve números de negócio estruturados. 
 
-📚 Catálogo de consultas
+Se você perguntar a um chatbot genérico *“quanto o cliente X me deve?”*, ele pode inventar um valor plausível, misturar meses, confundir receitas com despesas ou responder com confiança algo que sequer existe. 
 
-Cada consulta é declarada uma vez, com metadados que o LLM usa para decidir quando chamá-la.
+Em um ambiente de ERP, isso é inaceitável:
+* Um número errado em uma conversa com o cliente gera um **problema comercial**.
+* Um número errado em um relatório fiscal gera um **problema jurídico**.
 
-Consulta Domínio Uso
-faturamento_por_cliente_periodo 💰 Vendas Quanto cada cliente faturou, ranking, maior cliente
-ticket_medio_por_regiao 💰 Vendas Ticket médio, valor médio por venda, comparação regional
-titulos_vencidos_por_cliente 📥 Receitas Inadimplência, clientes em atraso, contas a receber
-evolucao_receita_mensal 📥 Receitas Tendência de receita, comparativo mês a mês
-concentracao_receita_por_cliente 📥 Receitas Risco de dependência, participação percentual
-contas_pagar_vencidas_por_centro_custo 📤 Despesas Despesas em atraso, gastos por área
-evolucao_contas_pagar 📤 Despesas Tendência de despesas, comparativo mensal
-ordens_producao_atrasadas 🏭 Produção Produção atrasada, valor previsto em risco
+💡 **A tese deste projeto:** Um LLM pode conversar com o dado, mas **nunca deve calcular o dado**. Ele escolhe qual consulta rodar (o código executável), o banco de dados devolve o número exato e só então o LLM redige a resposta — usando exclusivamente o que veio do banco.
 
-Os quatro domínios cobrem as demandas mais citadas por clientes de ERP: vendas, receitas, despesas e produção.
+Use o código com cuidado.
+Pergunta ➔ Classificação de Escopo ➔ Planejamento da Consulta ➔ Execução Determinística no Banco ➔ Composição da Resposta via JSON
 
-🔒 Uma garantia de não-alucinação
+---
 
-Este é o coração do projeto. Três mecanismos independentes.
+### ✨ O que está implementado
 
-Recusa explícita fora do domínio. Quando a pergunta não pertence ao domínio de dados do ERP, nenhum LLM é chamado, nenhum dado é tocado e a recusa é determinística. A resposta retorna outOfScope: true com data: null e queryUsed: null na trilha.
+| Camada | O que faz |
+| :--- | :--- |
+| **🧱 Domain** | Entidades do ERP: clientes, títulos a receber, contas a pagar, ordens de produção. |
+| **📋 Query Catalog** | 8 consultas de negócio declaradas com nome, domínio, descrição e parâmetros tipados. |
+| **🧠 AI Layer** | `IAiProvider` com dois provedores: `OpenAiProvider` (com chave) e `DeterministicAiProvider` (fallback local). |
+| **⚙️ Orchestrator** | Orquestra o fluxo dinâmico: classificação → planejar → executar → compor. |
+| **🌐 API** | Endpoints REST: catálogo, execução direta e pergunta em linguagem natural. |
+| **✅ Testes** | 42 testes automatizados cobrindo roteamento, limites, escopo e garantia anti-alucinação. |
 
-Execução isolada da composição. O LLM que redige a resposta nunca tem acesso ao banco. Ele recebe apenas o JSON já retornado pela consulta. Não existe caminho técnico para ele inventar um número — ele não tem de onde tirar outro.
+---
 
-Testes que provam a garantia. O teste Ask_StructuredData_ShouldMatch_DirectQueryExecution compara o resultado do orquestrador contra a execução direta da mesma consulta, valor por valor, ordenado. Se um único decimal for adicionado, omitido ou alterado, o teste quebra.
+### 🏗️ Arquitetura
 
-🚀 Como rodar
+O projeto é dividido em quatro camadas principais, seguindo os princípios de baixo acoplamento onde as dependências apontam **sempre para dentro**:
 
-Pré-requisitos: .NET 10 SDK. Nada mais — o banco é SQLite em arquivo local.
+* **`X3AiAnalytics.Domain`** — Entidades e enumerações. Possui zero dependência externa.
+* **`X3AiAnalytics.Application`** — Contratos de IA, orquestrador e compositor de respostas.
+* **`X3AiAnalytics.Infraestrutura`** — EF Core, SQLite, catálogo de consultas e implementação dos provedores de IA.
+* **`X3AiAnalytics.Api`** — Terminais (endpoints) REST que realizam a orquestração de entrada.
+* **`X3AiAnalytics.Tests`** — Suíte xUnit cobrindo testes unitários, catálogo, orquestrador e chamadas HTTP.
 
-git clone https://github.com/silcwb/X3AiAnalytics.git
+> 🛠️ **Princípio de Design:** O Domínio não conhece o EF Core, a Aplicação não conhece o SQLite e a API apenas consome os contratos. Trocar o SQLite por SQL Server ou PostgreSQL exige a mudança de apenas **uma linha** no `Program.cs`.
+
+---
+
+### 📚 Catálogo de consultas
+
+Cada consulta de negócio é declarada uma única vez, contendo os metadados necessários para o LLM decidir quando e como chamá-la.
+
+| Consulta | Domínio | Uso / Casos de Negócio |
+| :--- | :--- | :--- |
+| `faturamento_por_cliente_periodo` | 💰 Vendas | Quanto cada cliente faturou, rankings e identificação do maior cliente. |
+| `ticket_medio_por_regiao` | 💰 Vendas | Ticket médio, valor médio por venda e comparações regionais. |
+| `titulos_vencidos_por_cliente` | 📥 Receitas | Análise de inadimplência, clientes em atraso e contas a receber. |
+| `evolucao_receita_mensal` | 📥 Receitas | Tendência de faturamento e comparativos mês a mês. |
+| `concentracao_receita_por_cliente` | 📥 Receitas | Risco de dependência comercial e participação percentual de clientes. |
+| `contas_pagar_vencidas_por_centro_custo` | 📤 Despesas | Despesas em atraso e detalhamento de gastos por área/setor. |
+| `evolucao_contas_pagar` | 📤 Despesas | Tendência de despesas estruturadas e comparativos mensais. |
+| `ordens_producao_atrasadas` | 🏭 Produção | Gargalos em linhas de produção e valor previsto em risco de entrega. |
+
+---
+
+### 🔒 Uma garantia de não-alucinação
+
+Este mecanismo representa o coração do projeto e funciona sob três pilares independentes:
+
+1. **Recusa explícita fora do domínio:** Quando a pergunta do usuário não pertence ao universo do ERP, nenhum LLM de processamento é acionado. A recusa é determinística: a API retorna um payload contendo `outOfScope: true`, com `data: null` e `queryUsed: null`.
+2. **Execução isolada da composição:** O modelo de IA responsável por redigir o texto amigável nunca tem acesso direto ao banco de dados. Ele recebe exclusivamente o JSON retornado pela consulta estruturada. Não há caminho técnico viável para a IA inventar um número, pois ela não possui outra fonte de informação.
+3. **Testes automatizados de consistência:** O teste analítico `Ask_StructuredData_ShouldMatch_DirectQueryExecution` compara a resposta textual/estruturada gerada pelo orquestrador contra a execução crua da consulta no banco. Se um único decimal for modificado, omitido ou inventado, a suíte de testes quebra imediatamente no CI.
+
+---
+
+### 🚀 Como rodar
+
+* **Pré-requisitos:** .NET 10 SDK instalado. O banco de dados roda em um arquivo SQLite local, dispensando configurações extras.
+
+```bash
+# Clonar o repositório
+git clone https://github.com
 cd X3AiAnalytics
+
+# Compilar o projeto
 dotnet build
+
+# Executar a API
 dotnet run --project src/X3AiAnalytics.Api
+```
 
-A API sobe em http://localhost:5212 e o Swagger em http://localhost:5212/swagger .
+* A API ficará disponível em: `http://localhost:5212`
+* O Swagger para testes de interface pode ser acessado em: `http://localhost:5212/swagger`
 
-Pontos finais
+#### Pontos finais (Endpoints)
 
-Método Rota Descrição
-GET /api/v1/health Status da aplicação
-GET /api/v1/queries Catálogo completo de consultas
-POST /api/v1/queries/{name}/run Executa uma consulta direta, sem IA
-POST /api/v1/ask Pergunta em linguagem natural
+| Método | Rota | Descrição |
+| :--- | :--- | :--- |
+| **GET** | `/api/v1/health` | Verifica o status de saúde da aplicação. |
+| **GET** | `/api/v1/queries` | Retorna o catálogo completo de consultas e seus metadados. |
+| **POST** | `/api/v1/queries/{name}/run` | Executa uma consulta direta de forma determinística (sem IA). |
+| **POST** | `/api/v1/ask` | Processa perguntas do usuário em linguagem natural. |
 
-exemplos
+#### Exemplos de chamadas via cURL
 
-Listar o amigo:
-
+* **Listar catálogo:**
+```bash
 curl http://localhost:5212/api/v1/queries
+```
 
-Executar consulta can:
+* **Executar consulta analítica direta:**
+```bash
+curl -X POST http://localhost:5212/api/v1/queries/titulos_vencidos_por_cliente/run \
+     -H "Content-Type: application/json" \
+     -d "{\"diasMinimosAtraso\":\"30\"}"
+```
 
-curl -X POST http://localhost:5212/api/v1/queries/titulos_vencidos_por_cliente/run -H “Content-Type: application/json” -d “{"diasMinimosAtraso":"30"}”
+* **Perguntar em linguagem natural:**
+```bash
+curl -X POST http://localhost:5212/api/v1/ask \
+     -H "Content-Type: application/json" \
+     -d "{\"question\":\"Quais clientes têm títulos vencidos há mais de 60 dias?\"}"
+```
+*A resposta deste endpoint retornará unificada contendo: texto legível (`resposta`), registros estruturados (`dados`), rastreamento de telemetria (`queryUsed`, `parâmetros`, `tempo de execução`, `provedor`) e a flag `outOfScope`.*
 
-Pergunte em linguagem natural:
+---
 
-curl -X POST http://localhost:5212/api/v1/ask -H “Content-Type: application/json” -d “{"question":"Quais clientes têm títulos vencidos há mais de 60 dias?"}”
+### 🧪 Testes
 
-A resposta traz resposta (texto legível), dados (registros estruturados), rastreamento (consulta usada, parâmetros, contagem de linhas, tempo de execução e provedor) e outOfScope.
+```bash
+dotnet test
+```
 
-🧪 Testes
+| Suíte de Testes | O que prova |
+| :--- | :--- |
+| **`DeterministicProviderTests`** | Garante que as 8 consultas mapeadas roteiam corretamente e congela regressões de classificação. |
+| **`QueryCatalogTests`** | Valida a aplicação correta de filtros, ordenações, cálculos percentuais e o teto limite de 200 linhas. |
+| **`OrchestratorTests`** | Prova que entradas fora de escopo não tocam os dados e valida que as saídas batem 100% com o banco. |
+| **`ApiTests`** | Assegura os retornos HTTP corretos (200, 400, 404) e a integridade dos endpoints. |
 
-teste dotnet
+* **Resultado atual da suíte:** 42 aprovados, 0 reprovados.
 
-Suíte O que prova
-DeterministicProviderTests Roteia as 8 consultas corretamente + congelamento regressões de roteamento
-QueryCatalogTests Filtros, ordenação, limite de 200 linhas, percentuais
-OrchestratorTests Fora de escopo nunca devolve dado; dados batem com execução direta
-ApiTests 200/400/404 nos endpoints, catálogo com 8 itens
+---
 
-Resultado atual: 42 aprovados, 0 reprovados.
+### 🧭 Decisões técnicas
 
-🧭 Decisões técnicas
+* **O LLM não gera nem executa SQL nativo:** O provedor de inteligência apenas mapeia a intenção da pergunta para uma rota de consulta existente em um catálogo estrito. Não há riscos de SQL Injection ou buscas fora do espaço de ações auditável.
+* **Dois provedores sob o mesmo contrato:** O sistema utiliza `OpenAiProvider` para ambientes produtivos e o `DeterministicAiProvider` como mecanismo de fallback offline. Este fallback usa pontuação ponderada por palavras-chave e um compositor local, permitindo testes completos e demonstrações sem custos de infraestrutura de nuvem.
+* **Bug real mitigado (Empate de classificação):** Durante o desenvolvimento, perguntas como *“Quais clientes têm títulos vencidos há mais de 60 dias?”* geravam empate de pesos entre as chaves "cliente" e "vencido", ativando erroneamente o faturamento. O algoritmo foi corrigido para adotar pesos ponderados (termos de negócio específicos valem 3, termos genéricos valem 1). Um teste de regressão foi criado para impedir que o erro retorne ao código.
+* **Limite estrito de 200 linhas por consulta:** Evita estouro de contexto nos modelos de linguagem, economiza tokens, reduz a latência HTTP e impede respostas ilegíveis ao usuário final.
+* **SQLite para ambiente local:** Configuração zero para rodar o ecossistema. O catálogo utiliza expressões LINQ totalmente traduzíveis, facilitando a migração futura para outros dialetos SQL.
 
-O LLM não executa SQL. O provedor escolhe qual consultar rodar a partir de um catálogo fechado. Não gera SQL, não inventa tabela, não tem acesso ao DbContext. O espaço de ações é finito e auditável.
+#### ⚠️ Limites conhecidos e melhorias técnicas
+* **Estado compartilhado no compositor:** O provedor determinístico guarda em memória o estado da última consulta processada para fins de formatação. Em ambientes de produção concorrentes, esse nome de consulta deve ser explicitamente propagado via parâmetros para garantir a thread-safety.
+* **Cálculo de dias de atraso pós-banco:** A instrução de agregação `.Days` baseada na diferença de datas (`hoje - dataVencimento`) gerou falhas de tradução em tempo de execução no SQLite. Para contornar a limitação, a API executa a agregação trazendo a data mínima do banco e calcula o intervalo de dias em memória utilizando `.ToListAsync()`.
 
-Dois provedores, um contrato. OpenAiProvider para produção, DeterministicAiProvider como fallback sem chave de API. O fallback não é um brinquedo: usa pontuação ponderada de palavras-chave e compositor próprio, e funciona 100% offline — o que permite testar e demonstrar sem custo.
+---
 
-🐛 Bug real encontrado em desenvolvimento: empate de classificação. A pergunta “Quais clientes têm títulos vencidos há mais de 60 dias?” rotei para faturamento_por_cliente_periodo. Causa: “cliente” e “vencido” valiam 1 ponto cada, dava empate, e o dicionário devolvia a primeira chave inserida. Correção: pontuação ponderada (termos específicos valem 3, genéricos valem 1) e desempate explícito por ordem de especificidade. O bug está congelado em teste de regressão — se alguém reverter, o CI quebra.
+### 🗺️ Roteiro de evolução (Roadmap)
 
-Limite de 200 linhas por consulta. Toda consulta com respeito MaxRows. Protege o contexto do LLM, a latência e evita resposta ilegível. Testado automaticamente.
+* [ ] Implementação de autenticação, controle de acessos (RBAC) e arquitetura multiusuário.
+* [ ] Substituição do comando `EnsureCreated` por Migrations formais para ambientes de produção.
+* [ ] Desenvolvimento de um painel visual em Angular para interagir com a API de IA.
+* [ ] Acoplamento de buscas híbridas em documentos não estruturados (RAG) para complementar o catálogo do ERP.
+* [ ] Criação de conectores de integração nativos para os barramentos REST e SOAP do Sage X3.
+* [ ] Implementação de ferramentas de observabilidade (rastreamento de latência, volumetria de requisições e taxas de recusa por escopo).
 
-SQLite em desenvolvimento. Zero configuração para rodar. O catálogo usa LINQ traduzível e nenhuma consulta depende do dialeto específico.
+---
 
-⚠️ Limite conhecido: estado compartilhado no compositor. O DeterministicAiProvider guarda a última consulta programada na memória para escolher o modelo de formatação. Funciona no contexto monousuário de demonstração; em produção, o nome da consulta seria propagado como parâmetro, eliminando o estado compartilhado.
+### 👩‍💻 Autora
 
-⚠️ Cálculo de dias de atraso em memória. (hoje - dataVencimento).Days dentro de agregação não é traduzido pelo EF Core com SQLite. Diagnóstico: erro de runtime não pôde ser traduzido. Solução: agregar com Min(dataVencimento) no banco e calcular os dias em memória após o ToListAsync.
-
-🗺️ Roteiro
-
-Autenticação e multiusuário
-Migrações em vez de GaranteCreated para produção
-Painel Angular consumindo a API conversacional
-Consultas encontradas sobre documentos (RAG) complementando as consultas estruturadas
-Conectores nativos para REST e SOAP do Sage X3
-Observabilidade: conclusões por consulta, latência e taxas de recusa
-
-👩‍💻 Autora
-
-Silvana Siqueira — KETHER — Soluções em Inteligência Artificial
-
-Mais de 20 anos em TI e desenvolvimento. Atuação na implantação do Sage X3 no Brasil (2016), com Adonix/Eclipse, telas, relatórios fiscais, fiscais e financeiros, e integrações. Posteriormente, tecnologias Microsoft, Node.js e microsserviços Java/Spring Boot.
-
-📄 Licença
-
-MIT.
+**Silvana Siqueira** — KETHER — Soluções em Inteligência Artificial  
+*Mais de 20 anos de experiência em Tecnologia da Informação.*

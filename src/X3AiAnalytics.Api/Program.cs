@@ -62,3 +62,4 @@ app.MapGet("/api/v1/queries", (QueryCatalog catalog) =>
 app.MapControllers();
 
 app.Run();
+public partial class Program { }

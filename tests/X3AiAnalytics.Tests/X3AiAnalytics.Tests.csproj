@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4" />
-    <PackageReference Include="FluentAssertions" Version="8.11.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
@@ -21,8 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\X3AiAnalytics.Application\X3AiAnalytics.Application.csproj" />
     <ProjectReference Include="..\..\src\X3AiAnalytics.Infrastructure\X3AiAnalytics.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\src\X3AiAnalytics.Domain\X3AiAnalytics.Domain.csproj" />
+    <ProjectReference Include="..\..\src\X3AiAnalytics.Api\X3AiAnalytics.Api.csproj" />
   </ItemGroup>
 
 </Project>

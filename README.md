@@ -17,28 +17,6 @@ Em um ambiente de ERP, isso é inaceitável:
 
 💡 **A tese deste projeto:** Um LLM pode conversar com o dado, mas **nunca deve calcular o dado**. Ele escolhe qual consulta rodar (o código executável), o banco de dados devolve o número exato e só então o LLM redige a resposta — usando exclusivamente o que veio do banco.
 
-Pergunta ➔ Classificação de Escopo ➔ Planejamento da Consulta ➔ Execução Determinística no Banco ➔ Composição da Resposta via JSON
-
-markdown
-# 🤖 X3AiAnalytics
-
-Camada de inteligência conversacional sobre dados de ERP — **sem alucinação**.  
-Projeto desenvolvido por **Silvana Siqueira** para a **KETHER — Soluções em Inteligência Artificial**.
-
----
-
-### 🎯 O problema que este projeto resolve
-
-A inteligência artificial generativa é excelente em conversar, mas extremamente não confiável quando o assunto envolve números de negócio estruturados. 
-
-Se você perguntar a um chatbot genérico *“quanto o cliente X me deve?”*, ele pode inventar um valor plausível, misturar meses, confundir receitas com despesas ou responder com confiança algo que sequer existe. 
-
-Em um ambiente de ERP, isso é inaceitável:
-* Um número errado em uma conversa com o cliente gera um **problema comercial**.
-* Um número errado em um relatório fiscal gera um **problema jurídico**.
-
-💡 **A tese deste projeto:** Um LLM pode conversar com o dado, mas **nunca deve calcular o dado**. Ele escolhe qual consulta rodar (o código executável), o banco de dados devolve o número exato e só então o LLM redige a resposta — usando exclusivamente o que veio do banco.
-
 Use o código com cuidado.
 Pergunta ➔ Classificação de Escopo ➔ Planejamento da Consulta ➔ Execução Determinística no Banco ➔ Composição da Resposta via JSON
 

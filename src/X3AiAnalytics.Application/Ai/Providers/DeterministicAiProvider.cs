@@ -6,6 +6,9 @@ public class DeterministicAiProvider : IAiProvider
 {
     public string Name => "deterministic-fallback";
 
+    // Guarda a última consulta planejada para o compositor formatar corretamente.
+    private string? _lastQueryName;
+
     // Palavras de peso 3 = altamente específicas do domínio da consulta.
     // Pesos maiores vencem empates: "vencido" aponta para títulos, "cliente" não basta sozinha.
     private static readonly (string Query, string[] Strong, string[] Weak)[] Rules =
@@ -98,6 +101,8 @@ public class DeterministicAiProvider : IAiProvider
         {
             if (numero.HasValue) parameters["topN"] = numero.Value.ToString();
         }
+        
+        _lastQueryName = query;
 
         return Task.FromResult(new PlanResult
         {
@@ -121,7 +126,7 @@ public class DeterministicAiProvider : IAiProvider
 
         return Task.FromResult(new ComposeResult
         {
-            Answer = $"Resultados encontrados: {jsonData}",
+            Answer = DeterministicComposer.Compose(_lastQueryName ?? string.Empty, jsonData),
             DataWasEmpty = false
         });
     }

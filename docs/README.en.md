@@ -1,6 +1,5 @@
 [🇺🇸 English](docs/README.en.md) · [🇧🇷 Português](../README.md)
 
-```markdown
 # 🤖 X3AiAnalytics
 
 Conversational intelligence layer over ERP data — **without hallucination**.  

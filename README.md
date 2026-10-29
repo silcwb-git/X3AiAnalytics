@@ -1,3 +1,5 @@
+[🇺🇸 English](README.en.md) · [🇧🇷 Português](README.md)
+
 # 🤖 X3AiAnalytics
 
 Camada de inteligência conversacional sobre dados de ERP — **sem alucinação**.  

@@ -1,4 +1,4 @@
-[🇺🇸 English](README.en.md) · [🇧🇷 Português](README.md)
+[🇺🇸 English](docs/README.en.md) · [🇧🇷 Português](README.md)
 
 # 🤖 X3AiAnalytics
 

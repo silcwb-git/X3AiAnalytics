@@ -1,4 +1,4 @@
-[🇺🇸 English](docs/README.en.md) · [🇧🇷 Português](README.md)
+[🇺🇸 English](docs/README.en.md) · [🇧🇷 Português](../README.md)
 
 ```markdown
 # 🤖 X3AiAnalytics
